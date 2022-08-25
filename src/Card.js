@@ -1,14 +1,9 @@
-import React, {Fragment, Component} from 'react';
+import React, {Component} from 'react';
 import './App.css';
-import { Card, CardImg, CardText, CardBody, CardLink,
-  CardTitle, CardSubtitle, Button } from 'reactstrap';
-import {Link} from "react-router-dom";  
-
+import { Card,  CardText, CardBody, CardTitle, Button } from 'reactstrap';
 import actions from './actions/index';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-//import { push } from 'connected-react-router'
-
 
 class SingleCard extends Component {
 
@@ -52,15 +47,11 @@ class SingleCard extends Component {
     this.props.actions.addItemToComparison(item);
   }  
 
-  findObject = (id) =>{
-    //this.props.ite
-  }
-
   render(){
     return (
       <Card className="card-small" style={{marginBottom: "1rem"}}>
         <div className="card-image">
-          <img src={this.props.link} alt="Card image cap" />                  
+          <img src={this.props.link} alt="" />                  
         </div>
         <CardBody className="single-card">
           <div className="card-text-wrap">

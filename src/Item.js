@@ -2,11 +2,9 @@ import React, {Fragment, Component} from 'react';
 import './App.css';
 import { Table } from 'reactstrap';
 import Rating from 'react-rating';
-import { Card, CardImg, CardText, CardBody, CardLink,
-  CardTitle, CardSubtitle, Button } from 'reactstrap';
+import { Card, CardText, CardBody, CardTitle, Button } from 'reactstrap';
 
 class SingleItem extends Component {
-
   constructor(props){
     super(props);
     this.state = {
@@ -14,15 +12,11 @@ class SingleItem extends Component {
     }
   }
 
-  consoleProps = () =>{
-   
-  }
-
-  addToCard = (id) =>{
+  addToCard = (id) => {
     this.props.callbackAddActiveToCart(id);
   }
 
-  compareItems = (id) =>{
+  compareItems = (id) => {
     this.props.callbackAddActiveToComparison(id);
   }  
 
@@ -31,7 +25,7 @@ class SingleItem extends Component {
       <Fragment>
       <Card style={{marginBottom: "1rem"}} className="card-large">
         <div className="card-large-image">
-          <img width="100%" src={this.props.activeItem.photo} alt="Card image cap" />                  
+          <img width="100%" src={this.props.activeItem.photo} alt="" />                  
         </div>
         <CardBody className="card-large-text">
           <div>

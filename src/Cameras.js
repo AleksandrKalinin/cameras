@@ -11,19 +11,13 @@ import SingleItem from './Item';
 import PagePagination from './PagePagination'
 import axios from 'axios'
 import InputRange from 'react-input-range';
-
-import { map, reduce, somethingElse } from 'underscore';
 import ReactResizeDetector from 'react-resize-detector';
 import {CSSTransition} from 'react-transition-group';
-
-
 import {bindActionCreators} from 'redux';
 import actions from './actions/index';
 import fetchItems from './actions/fetchItems';
 import {connect} from 'react-redux';
-
 import {Link} from 'react-router-dom';
-import { push } from 'connected-react-router';
 
 class Cameras extends Component {
 
@@ -33,6 +27,7 @@ class Cameras extends Component {
       collapsed: true,
       searchValue: '',
       items: [],
+      priceItems: [],
       originalItems: [],
       manufacturers: [],
       matrixTypes: [],
@@ -83,6 +78,7 @@ class Cameras extends Component {
   		.then(response => 
   			this.setState({
   				items: response.data,
+  				priceItems: response.data,
   				originalItems: response.data,
   				loaded: true
   			}, () => this.executeFunctions())
@@ -90,24 +86,18 @@ class Cameras extends Component {
   }
 
 	componentWillUnmount() {
-	    //document.body.style.overflow = 'unset';
-	    document.removeEventListener('click', this.handleClickOutside);
+    document.removeEventListener('click', this.handleClickOutside);
 	} 
 
-	 setWrapperRef(node) {
-	    this.wrapperRef = node;
-	  }
+	setWrapperRef(node) {
+	  this.wrapperRef = node;
+	}
 
 	handleClickOutside(event){
-
 		if(!event.target.classList.contains('card-title-link')){
-		    if (this.wrapperRef && !this.wrapperRef.contains(event.target) && (this.state.singleItemVisible  == true)) {
-		      this.setState({ singleItemVisible: !this.state.singleItemVisible })
-		    } 
-
-		}
-		else{
-
+	    if (this.wrapperRef && !this.wrapperRef.contains(event.target) && (this.state.singleItemVisible  === true)) {
+	      this.setState({ singleItemVisible: !this.state.singleItemVisible })
+	    }
 		}
 	} 
 
@@ -120,10 +110,6 @@ class Cameras extends Component {
   executeFunctions = () =>{
   	this.getManufacturers(this.state.items);
   	this.calcRangeValues();
-  }
-
-  consoleData = () =>{
-  	
   }
 
   calcRangeValues = () =>{
@@ -141,7 +127,6 @@ class Cameras extends Component {
 
   getManufacturers = (params) =>{
   	let manufacturers = [];
-  	let manufacturersCategories = [];
   	let matrixTypes = [];
   	let matrixTypesCategories = [];
   	let pixelsNumber = [];
@@ -158,16 +143,15 @@ class Cameras extends Component {
   		types.push(params[i].type);
   	}
   	manufacturers = [...new Set(manufacturers)];
-	matrixTypes = [...new Set(matrixTypes)];
-	pixelsNumber = [...new Set(pixelsNumber)];
-	matrixSizes = [...new Set(matrixSizes)];
-	types = [...new Set(types)]; 
-	this.buildCheckboxes(manufacturers);
-	this.buildCheckboxes(matrixTypes);
-	this.buildCheckboxes(pixelsNumber);
-	this.buildCheckboxes(matrixSizes);
-	this.buildCheckboxes(types); 	
-  	//console.log(manufacturers.length + matrixTypes.length + pixelsNumber.length + matrixSizes.length + types.length);
+		matrixTypes = [...new Set(matrixTypes)];
+		pixelsNumber = [...new Set(pixelsNumber)];
+		matrixSizes = [...new Set(matrixSizes)];
+		types = [...new Set(types)]; 
+		this.buildCheckboxes(manufacturers);
+		this.buildCheckboxes(matrixTypes);
+		this.buildCheckboxes(pixelsNumber);
+		this.buildCheckboxes(matrixSizes);
+		this.buildCheckboxes(types); 	
   	this.setState({
   		manufacturers,
   		matrixTypes,
@@ -181,18 +165,18 @@ class Cameras extends Component {
   	})
   }
 
-  buildCheckboxes = (params) =>{
-	let checkboxes = this.state.checkboxes.slice();
-	let temp = [];
-	temp.length = params.length;
-	temp.fill(false);
-	checkboxes.push(temp);
-	this.setState({
-		checkboxes
-	})
+  buildCheckboxes = (params) => {
+		let checkboxes = this.state.checkboxes.slice();
+		let temp = [];
+		temp.length = params.length;
+		temp.fill(false);
+		checkboxes.push(temp);
+		this.setState({
+			checkboxes
+		})
   }
 
-   addItem = () =>{
+  addItem = () =>{
   	let newObject = {};
   	newObject["name"] = "blabla";
   	newObject["price"] = 2330;
@@ -206,32 +190,32 @@ class Cameras extends Component {
 
   sortByPrice = () =>{
   	let items = this.state.items.slice(); 
-  		if (this.state.isPriceAscending) {
-  			this.setState(prevState => { items.sort((a,b) => (a.price - b.price)) })
-  		}
-  		else{
-  			this.setState(prevState => { items.sort((a,b) => (b.price - a.price)) })
-  		}
+		if (this.state.isPriceAscending) {
+			this.setState(prevState => { items.sort((a,b) => (a.price - b.price)) })
+		}
+		else{
+			this.setState(prevState => { items.sort((a,b) => (b.price - a.price)) })
+		}
 
-  		this.setState({
-  			items,
-  			isPriceAscending: !this.state.isPriceAscending
-  		})
+		this.setState({
+			items,
+			isPriceAscending: !this.state.isPriceAscending
+		})
   }
 
   sortByPopularity = () =>{
   	let items = this.state.items.slice(); 
-  		if (this.state.isPopularityAscending ) {
-  			this.setState(prevState => { items.sort((a,b) => (a.popularity - b.popularity)) })
-  		}
-  		else{
-  			this.setState(prevState => { items.sort((a,b) => (b.popularity - a.popularity)) })
-  		}
+		if (this.state.isPopularityAscending ) {
+			this.setState(prevState => { items.sort((a,b) => (a.popularity - b.popularity)) })
+		}
+		else{
+			this.setState(prevState => { items.sort((a,b) => (b.popularity - a.popularity)) })
+		}
 
-  		this.setState({
-  			items,
-  			isPopularityAscending: !this.state.isPopularityAscending
-  		})
+		this.setState({
+			items,
+			isPopularityAscending: !this.state.isPopularityAscending
+		})
   }  
 
 	sortByName= () =>{
@@ -247,26 +231,17 @@ class Cameras extends Component {
 		})		
 	}  
 
-	getValue = (e) =>{
-		
-	}
-
 	loadMore = (e) => {
-		if (e.target.value == 'Все') {
+		if (e.target.value === 'Все') {
 			this.setState({
 				visible: this.state.items.length
 			})
 		}
 		else{
-		    this.setState({
-		      visible: e.target.value
-		    })
+	    this.setState({
+	      visible: e.target.value
+	    })
 		}
-	  }
-
-
-	filterBrands = () =>{
-
 	}
 
 	callbackFromPagination = (startPosition) => {
@@ -281,7 +256,6 @@ class Cameras extends Component {
 		let cartItems = this.state.cartItems;
 		let newItem = this.state.items[id - 1];
 		let result = cartItems.find(x => x.id === id);
-
 		if ( !result ) {
 			newItem["count"] = 1;
 			cartItems.push(newItem);
@@ -289,9 +263,9 @@ class Cameras extends Component {
 		}
 		else if ( result ) {
 			for (var i = 0; i < cartItems.length; i++) {
-		        if(cartItems[i].id == id) {
-		            cartItems[i].count++;
-		        }
+        if(cartItems[i].id === id) {
+            cartItems[i].count++;
+        }
 			}
 			this.setState({cartItems})	
 		}
@@ -302,10 +276,6 @@ class Cameras extends Component {
 		this.setState({
 			cartVisible: false
 		})
-	}
-
-	onResize = () =>{
-		
 	}
 
 	addActiveToCart = (id) => {
@@ -319,9 +289,9 @@ class Cameras extends Component {
 		}
 		else if ( result ) {
 			for (var i = 0; i < cartItems.length; i++) {
-		        if(cartItems[i].id == id) {
-		            cartItems[i].count++;
-		        }
+        if(cartItems[i].id === id) {
+            cartItems[i].count++;
+        }
 			}
 			this.setState({cartItems})	
 		}
@@ -341,14 +311,14 @@ class Cameras extends Component {
 		this.setState({
 			cartItems
 		})
-		if (cartItems.length == 0) {
+		if (cartItems.length === 0) {
 			this.setState({
 				cartVisible: false			
 			})
 		}
 	}
 
-	applyFilters = () =>{
+	applyFilters = () => {
 		let filters = this.state.selectedManufacturers;
 		let items = this.state.originalItems;
 		let newItems = [];
@@ -362,22 +332,23 @@ class Cameras extends Component {
 					let itemValues = Object.values(item);
 					let currentValue = Object.values(filters[j]);
 					let indexOfKey = itemKeys.indexOf(currentCategory[0])
-					if (itemValues[indexOfKey] == currentValue[0]) {
+					if (itemValues[indexOfKey] === currentValue[0]) {
 						count++
 					} 
 				}
-				if(count == filters.length){
+				if(count === filters.length){
 					newItems.push(item);
 				}
 			}
 			this.setState({
-				items: newItems
-			})			
+				items: newItems,
+				priceItems: newItems
+			}, () => this.calcRangeValues())			
 
 		}
 		else{
 			this.setState({
-				items
+				items, priceItems: items
 			})
 		}
 	} 
@@ -448,8 +419,7 @@ class Cameras extends Component {
 		else{
 			value4.min = this.state.valueStart.min;
 			this.setState({ value4 })
-		}
-		
+		}		
 	}
 
 	changeMaxPrice = (e) =>{
@@ -465,14 +435,9 @@ class Cameras extends Component {
 		
 	}	
 
-	filterByPrice = (value) =>{
-		let items = this.state.originalItems.filter((item,i) => item.price >= value.min  && item.price <= value.max );
-		this.setState({ value4: value, items })
-	}
-
-
-	consoleStore = () =>{
-		this.props.actions.consoleCurrentStore();
+	filterByPrice = (value) => {
+		let items = this.state.items.filter((item,i) => item.price >= value.min  && item.price <= value.max );
+		this.setState({ value4: value, priceItems: items })
 	}
 
 	addToCart = () =>{
@@ -484,22 +449,22 @@ class Cameras extends Component {
 	}
 
 	checkLinkCart = (e) =>{
-		if (this.props.reducer.cartItems.length == 0) {
+		if (this.props.reducer.cartItems.length === 0) {
 			e.preventDefault();
 			alert('Корзина пуста!');
 		}
 	}	
-
 	
   render(){
   	let filteredItems;
-  	if (this.state.items) {
-	  	filteredItems = this.state.items.filter(
+  	if (this.state.priceItems) {
+	  	filteredItems = this.state.priceItems.filter(
 	  		(word) =>{
 	  			return word.name.toLowerCase().indexOf(this.state.searchValue.toLowerCase()) !== -1;
 	  		}
 	  	) 
   	}
+
     return (
       <Fragment>
         <Navbar className="p-3 mb-2 bg-primary text-white" dark>

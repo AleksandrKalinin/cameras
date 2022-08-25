@@ -23,13 +23,11 @@ class Cart extends Component {
       count: 5,
       quantity: [],
       interval: null
-
     }
   }
 
   componentDidMount(){
-    if (this.props.reducer.cartItems.length == 0) {
-    	//this.setState({ interval:  })
+    if (this.props.reducer.cartItems.length === 0) {
     	this.setRedirect();
     }
 
@@ -37,7 +35,6 @@ class Cart extends Component {
     this.setState({
     	quantity
     }, () => this.getTotalPrice())
-
 
   }
 
@@ -48,19 +45,13 @@ class Cart extends Component {
     }
   }  
 
-  consoleProps = () =>{
-    
-  }
-
   setRedirect = () =>{
   	let interval = this.state.interval;
-	interval = setInterval(() => this.countSeconds(), 1000)
-	this.setState({ interval })  	
-  	//redirect here 
-  	//interval = setInterval(() => this.startCycle(), 1000)
+	  interval = setInterval(() => this.countSeconds(), 1000)
+	  this.setState({ interval })  	
   }
 
-  countSeconds = () =>{
+  countSeconds = () => {
   	if(this.state.count > 1){
   		this.setState({
   			count: this.state.count - 1
@@ -98,7 +89,7 @@ class Cart extends Component {
   }
 
   checkQuantity = () =>{
-  	if (this.state.quantity == 0) {
+  	if (this.state.quantity === 0) {
   		this.setRedirect();
   	}
   }
@@ -148,7 +139,7 @@ class Cart extends Component {
 				              {this.props.reducer.cartItems.map((item, index) =>
 				                <CSSTransition key={index} timeout={200} classNames="move">
 				                  <tr key={index} >
-				                        <td className="w-40 cart-image-wrapper" ><div className="cart-image"><img src={item.photo} /></div> {item.name}</td>
+				                        <td className="w-40 cart-image-wrapper" ><div className="cart-image"><img alt="" src={item.photo} /></div> {item.name}</td>
 				                        <td className="w-10 align-middle cart-input" ><Input data-index={index} value={this.state.quantity[index]} min="1" onChange={this.changeCount} type="number" /></td>
 				                        <td className="w-20 align-middle">{item.price}</td>
 				                        <td className="w-20 align-middle">{item.price}</td>

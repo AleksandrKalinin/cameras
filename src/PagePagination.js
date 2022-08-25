@@ -22,7 +22,7 @@ class PagePagination extends Component {
   setClasses = (params) =>{
     let activeState = [];
     for (var i = 0; i < params.length; i++) {
-      if (i == 0) {
+      if (i === 0) {
         activeState.push("active"); 
       }
       else{
@@ -34,26 +34,19 @@ class PagePagination extends Component {
     })
   }
 
-
-
   selectPage = (id, e) =>{
     let itemId = e.currentTarget.getAttribute("data-index");
     this.currentPage(itemId)       
   }
 
   currentPage = (id) =>{
-    console.log(id);
     let activeState = this.state.activeState.slice(); 
     activeState.fill(' ');
     activeState[id] = 'active';
     this.setState({activeState}, () => this.showItems(id))
   }
 
-
-
-
   showItems = (id) =>{
-    let items = this.props.items.slice();
     let start = id * this.props.visible;
     this.props.callbackFromApp(start);
     this.setState({
@@ -63,7 +56,6 @@ class PagePagination extends Component {
 
   previousPage = (e) =>{
     if (this.state.currentId > 0) {
-      let itemId = e.currentTarget.getAttribute("data-index");
       let activeState = this.state.activeState; 
       let currentId = this.state.currentId - 1;
       this.setState({
@@ -76,7 +68,6 @@ class PagePagination extends Component {
   nextPage = (e) =>{
     let maxLength = Math.ceil(this.props.items.length / this.props.visible)
     if (this.state.currentId < maxLength - 1) {
-      let itemId = e.currentTarget.getAttribute("data-index");
       let activeState = this.state.activeState;
       let currentId = Number(this.state.currentId) + 1;
       this.setState({
@@ -99,14 +90,8 @@ class PagePagination extends Component {
     }, () => this.currentPage(this.state.currentId) )
   }
 
-  consoleState = () =>{
-
-
-  }
-
   render() {
     let pageNumbers = [];
-    let activeState = this.state.activeState;
     for (let i = 1; i <= Math.ceil(this.props.items.length / this.props.visible); i++) {
         pageNumbers.push(i);
     }    
