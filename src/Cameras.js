@@ -29,6 +29,8 @@ class Cameras extends Component {
       items: [],
       priceItems: [],
       originalItems: [],
+      finalItems: [],
+      checkedItems: [],
       manufacturers: [],
       matrixTypes: [],
       pixelsNumber: [],
@@ -80,6 +82,7 @@ class Cameras extends Component {
   				items: response.data,
   				priceItems: response.data,
   				originalItems: response.data,
+  				checkedItems: response.data,
   				loaded: true
   			}, () => this.executeFunctions())
   		)  
@@ -112,7 +115,7 @@ class Cameras extends Component {
   	this.calcRangeValues();
   }
 
-  calcRangeValues = () =>{
+  calcRangeValues = () => {
   	let price = this.state.items.map((value, key) => value.price);
   	let minValue = Math.min(...price);
   	let maxValue = Math.max(...price);
@@ -336,19 +339,25 @@ class Cameras extends Component {
 						count++
 					} 
 				}
-				if(count === filters.length){
+				if(count === filters.length) {
 					newItems.push(item);
 				}
 			}
 			this.setState({
 				items: newItems,
-				priceItems: newItems
-			}, () => this.calcRangeValues())			
+				checkedItems: newItems
+			}, () => {
+				this.calcRangeValues();
+				this.filterByPrice();
+			})			
 
 		}
-		else{
+		else {
 			this.setState({
-				items, priceItems: items
+				items, checkedItems: items
+			}, () => { 
+				this.calcRangeValues();
+				this.filterByPrice(); 
 			})
 		}
 	} 
@@ -436,8 +445,14 @@ class Cameras extends Component {
 	}	
 
 	filterByPrice = (value) => {
-		let items = this.state.items.filter((item,i) => item.price >= value.min  && item.price <= value.max );
-		this.setState({ value4: value, priceItems: items })
+		let priceItems;
+		if(value) {
+			priceItems = this.state.originalItems.filter((item,i) => item.price >= value.min  && item.price <= value.max );
+			this.setState({ value4: value })
+		} else {
+			priceItems = this.state.checkedItems;
+		}		
+		this.setState({ priceItems })
 	}
 
 	addToCart = () =>{
@@ -456,14 +471,24 @@ class Cameras extends Component {
 	}	
 	
   render(){
-  	let filteredItems;
-  	if (this.state.priceItems) {
-	  	filteredItems = this.state.priceItems.filter(
-	  		(word) =>{
-	  			return word.name.toLowerCase().indexOf(this.state.searchValue.toLowerCase()) !== -1;
-	  		}
-	  	) 
+  	let priceItems = this.state.priceItems;
+  	let checkedItems = this.state.checkedItems;
+  	let intersection;
+  	if (this.state.priceItems.length > this.state.checkedItems.length) {
+			intersection = priceItems.filter(function(n) {
+			  return checkedItems.indexOf(n) !== -1;
+			}); 
+  	} else {
+			intersection = checkedItems.filter(function(n) {
+			  return priceItems.indexOf(n) !== -1;
+			});  		
   	}
+  	let filteredItems;
+  	filteredItems = intersection.filter(
+  		(word) =>{
+  			return word.name.toLowerCase().indexOf(this.state.searchValue.toLowerCase()) !== -1;
+  		}
+  	) 
 
     return (
       <Fragment>
