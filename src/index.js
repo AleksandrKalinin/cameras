@@ -25,7 +25,7 @@ let initialState = {
 let store = configureStore(initialState)
 
 ReactDOM.render(
-	<Router>
+	<Router basename={process.env.PUBLIC_URL}>
 		 <Provider store = {store}>
 			<div className="router-wrapper">
 				<ConnectedRouter history={history}>
