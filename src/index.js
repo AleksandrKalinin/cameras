@@ -25,13 +25,13 @@ let initialState = {
 let store = configureStore(initialState)
 
 ReactDOM.render(
-	<Router basename={process.env.PUBLIC_URL}>
-		 <Provider store = {store}>
+	<Provider store = {store}>
+		<Router basename={process.env.PUBLIC_URL}>
 			<div className="router-wrapper">
 				<ConnectedRouter history={history}>
 				    <Route exact path="/" component={Cameras}/>
 				    <Route exact path="/cart" component={Cart} />
 				</ConnectedRouter>    
 			</div>
-		</Provider>
-	</Router>, document.getElementById('root'));
+		</Router>
+	</Provider>	, document.getElementById('root'));
