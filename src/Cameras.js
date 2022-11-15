@@ -70,13 +70,13 @@ class Cameras extends Component {
   }
 
   componentDidMount(){
-  	fetchItems();
+	
   	document.addEventListener('click', this.handleClickOutside);
   	if(this.state.cartVisible){
     	document.body.style.overflow = 'hidden';
   	} 
-  	
-  	axios.get('items.json')
+
+  	axios.get('./items.json')
   		.then(response => 
   			this.setState({
   				items: response.data,
@@ -86,6 +86,7 @@ class Cameras extends Component {
   				loaded: true
   			}, () => this.executeFunctions())
   		)  
+
   }
 
 	componentWillUnmount() {
@@ -111,6 +112,7 @@ class Cameras extends Component {
   }
 
   executeFunctions = () =>{
+  	console.log("executing");
   	this.getManufacturers(this.state.items);
   	this.calcRangeValues();
   }
@@ -129,6 +131,7 @@ class Cameras extends Component {
   }
 
   getManufacturers = (params) =>{
+  	console.log("getManufacturers");
   	let manufacturers = [];
   	let matrixTypes = [];
   	let matrixTypesCategories = [];

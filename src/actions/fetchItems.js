@@ -10,6 +10,7 @@ function fetchItems()  {
        axios.get('./items.json')
         .then(res => {
             const items = res.data;
+            console.log(items);
             actions.fetchItemsSuccess(items)
         })
 };
